@@ -10,6 +10,7 @@
 
 #import <AudioToolbox/AudioToolbox.h>
 #import <CoreMotion/CoreMotion.h>
+#import "CMMotionActivity+MotionActivityType.h"
 
 #define SQUARE(x) pow(x,2)
 
@@ -23,6 +24,8 @@ void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID, id
 
 @property BOOL isStopped;
 
+@property (nonatomic, strong) CMMotionActivityManager *motionActivityManager;
+
 @end
 
 @implementation CVAViewController
@@ -32,59 +35,79 @@ void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID, id
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
 	
+	_motionActivityManager = [[CMMotionActivityManager alloc] init];
+	[_motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new]
+											withHandler:^(CMMotionActivity *activity) {
+												[self performSelector:@selector(handleMotionActivity:) withObject:activity];
+											}];
+	
 	_theText = @"";
 	_isStopped = YES;
 	_netAcceleration = 0.2f;
 	
-	[NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(vibrate) userInfo:nil repeats:YES];
+	[NSTimer scheduledTimerWithTimeInterval:5.0f
+									 target:self
+								   selector:@selector(vibrate)
+								   userInfo:nil
+									repeats:YES];
+}
+
+- (void)handleMotionActivity:(CMMotionActivity *)activity
+{
+	NSLog(@"%@", activity);
+	CMMotionActivityType motionActivityType = [activity motionActivityType];
+}
+
+///	Vibrate with a certain intensity.
+///	@param intensity A floating point value from 0 to 1 representing the intensity of the vibration. 0 being the least intense, and 1 being most intense.
+- (void)vibrateWithIntensity:(CGFloat)intensity
+{
+#warning `vibrateWithIntensity:` not yet implemented.
 }
 
 - (void)vibrate
 {
-//	AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+	CGFloat multiplier;
+	int y, n;
 	
-	NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-	NSMutableArray* arr = [NSMutableArray array ];
-	
-	/*
-	[arr addObject:[NSNumber numberWithBool:YES]];	//vibrate for 2000ms
-	[arr addObject:[NSNumber numberWithInt:2000]];
-	
-	[arr addObject:[NSNumber numberWithBool:NO]]; 	//stop for 1000ms
-	[arr addObject:[NSNumber numberWithInt:1000]];
-	
-	[arr addObject:[NSNumber numberWithBool:YES]];	//vibrate for 1000ms
-	[arr addObject:[NSNumber numberWithInt:1000]];
-	
-	[arr addObject:[NSNumber numberWithBool:NO]]; 	//stop for 500ms
-	[arr addObject:[NSNumber numberWithInt:500]];
-	 */
-	
-//	[arr addObject:[NSNumber numberWithBool:YES]];
-//	[arr addObject:[NSNumber numberWithInt:200]];
-	
-	
-	CGFloat multiplier = SQUARE(MAX(MIN(_netAcceleration, 3), .5));
-	
-	int y = 200 * multiplier;
-	int n = 5 / multiplier;
-	
-	NSLog(@"%f", _netAcceleration);
-	NSLog(@"multiplier: %f y: %d, n: %d", multiplier, y, n);
-	
-	if ( multiplier > .25 ) {
-		[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES],[NSNumber numberWithInt:y],[NSNumber numberWithBool:NO],[NSNumber numberWithInt:n]]];
-		[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES],[NSNumber numberWithInt:y],[NSNumber numberWithBool:NO],[NSNumber numberWithInt:n]]];
-		[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES],[NSNumber numberWithInt:y],[NSNumber numberWithBool:NO],[NSNumber numberWithInt:n]]];
-		[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES],[NSNumber numberWithInt:y],[NSNumber numberWithBool:NO],[NSNumber numberWithInt:n]]];
-		[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES],[NSNumber numberWithInt:y],[NSNumber numberWithBool:NO],[NSNumber numberWithInt:n]]];
+	if ( [CMMotionActivityManager isActivityAvailable] ) {
+		multiplier = 1;
+	} else {
+		multiplier = SQUARE(MAX(MIN(_netAcceleration, 3), .5));
+		
+		int y = 200 * multiplier;
+		int n = 5 / multiplier;
+		
+		NSLog(@"%f", _netAcceleration);
+		NSLog(@"multiplier: %f y: %d, n: %d", multiplier, y, n);
 	}
 	
-	[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES],[NSNumber numberWithInt:y],[NSNumber numberWithBool:NO],[NSNumber numberWithInt:n]]];
-	[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES],[NSNumber numberWithInt:y],[NSNumber numberWithBool:NO],[NSNumber numberWithInt:n]]];
-	[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES],[NSNumber numberWithInt:y],[NSNumber numberWithBool:NO],[NSNumber numberWithInt:n]]];
-	[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES],[NSNumber numberWithInt:y],[NSNumber numberWithBool:NO],[NSNumber numberWithInt:n]]];
-	[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES],[NSNumber numberWithInt:y],[NSNumber numberWithBool:NO],[NSNumber numberWithInt:n]]];
+	NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+	NSMutableArray *arr = [[NSMutableArray alloc] init];
+	
+	if ( multiplier > .25 ) {
+		[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES], [NSNumber numberWithInt:y],
+								   [NSNumber numberWithBool:NO], [NSNumber numberWithInt:n]]];
+		[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES], [NSNumber numberWithInt:y],
+								   [NSNumber numberWithBool:NO], [NSNumber numberWithInt:n]]];
+		[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES], [NSNumber numberWithInt:y],
+								   [NSNumber numberWithBool:NO], [NSNumber numberWithInt:n]]];
+		[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES], [NSNumber numberWithInt:y],
+								   [NSNumber numberWithBool:NO], [NSNumber numberWithInt:n]]];
+		[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES], [NSNumber numberWithInt:y],
+								   [NSNumber numberWithBool:NO], [NSNumber numberWithInt:n]]];
+	}
+	
+	[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES], [NSNumber numberWithInt:y],
+							   [NSNumber numberWithBool:NO], [NSNumber numberWithInt:n]]];
+	[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES], [NSNumber numberWithInt:y],
+							   [NSNumber numberWithBool:NO], [NSNumber numberWithInt:n]]];
+	[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES], [NSNumber numberWithInt:y],
+							   [NSNumber numberWithBool:NO], [NSNumber numberWithInt:n]]];
+	[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES], [NSNumber numberWithInt:y],
+							   [NSNumber numberWithBool:NO], [NSNumber numberWithInt:n]]];
+	[arr addObjectsFromArray:@[[NSNumber numberWithBool:YES], [NSNumber numberWithInt:y],
+							   [NSNumber numberWithBool:NO], [NSNumber numberWithInt:n]]];
 	
 	[dict setObject:arr forKey:@"VibePattern"];
 	[dict setObject:[NSNumber numberWithInt:1] forKey:@"Intensity"];
@@ -154,7 +177,9 @@ void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID, id
 	[_startStopButton setTitle:@"Stop" forState:UIControlStateHighlighted];
 	[_startStopButton setTitle:@"Stop" forState:UIControlStateDisabled];
 	[_startStopButton setTitle:@"Stop" forState:UIControlStateSelected];
+	
 	[self resumeMotionDetection];
+	
 	_isStopped = NO;
 }
 
@@ -164,8 +189,11 @@ void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID, id
 	[_startStopButton setTitle:@"Start" forState:UIControlStateHighlighted];
 	[_startStopButton setTitle:@"Start" forState:UIControlStateDisabled];
 	[_startStopButton setTitle:@"Start" forState:UIControlStateSelected];
+	
 	[self stopMotionDetection];
+	
 	_isStopped = YES;
+	
 	_netAcceleration = 0.2f;
 }
 
