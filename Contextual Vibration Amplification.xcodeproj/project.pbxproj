@@ -18,6 +18,9 @@
 		C9FE1F5F170F3FD0008D4D61 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C9FE1F5E170F3FD0008D4D61 /* Default-568h@2x.png */; };
 		C9FE1F62170F3FD0008D4D61 /* CVAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FE1F61170F3FD0008D4D61 /* CVAViewController.m */; };
 		C9FE1F65170F3FD0008D4D61 /* CVAViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9FE1F63170F3FD0008D4D61 /* CVAViewController.xib */; };
+		C9FE1F6C170F425E008D4D61 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FE1F6B170F425E008D4D61 /* CoreMotion.framework */; };
+		C9FE1F6E170F4D58008D4D61 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FE1F6D170F4D58008D4D61 /* MessageUI.framework */; };
+		C9FE1F70170F7439008D4D61 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FE1F6F170F7439008D4D61 /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +40,9 @@
 		C9FE1F60170F3FD0008D4D61 /* CVAViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CVAViewController.h; sourceTree = "<group>"; };
 		C9FE1F61170F3FD0008D4D61 /* CVAViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CVAViewController.m; sourceTree = "<group>"; };
 		C9FE1F64170F3FD0008D4D61 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/CVAViewController.xib; sourceTree = "<group>"; };
+		C9FE1F6B170F425E008D4D61 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		C9FE1F6D170F4D58008D4D61 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		C9FE1F6F170F7439008D4D61 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +50,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9FE1F70170F7439008D4D61 /* AudioToolbox.framework in Frameworks */,
+				C9FE1F6E170F4D58008D4D61 /* MessageUI.framework in Frameworks */,
+				C9FE1F6C170F425E008D4D61 /* CoreMotion.framework in Frameworks */,
 				C9FE1F49170F3FD0008D4D61 /* UIKit.framework in Frameworks */,
 				C9FE1F4B170F3FD0008D4D61 /* Foundation.framework in Frameworks */,
 				C9FE1F4D170F3FD0008D4D61 /* CoreGraphics.framework in Frameworks */,
@@ -73,6 +82,9 @@
 		C9FE1F47170F3FD0008D4D61 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C9FE1F6F170F7439008D4D61 /* AudioToolbox.framework */,
+				C9FE1F6D170F4D58008D4D61 /* MessageUI.framework */,
+				C9FE1F6B170F425E008D4D61 /* CoreMotion.framework */,
 				C9FE1F48170F3FD0008D4D61 /* UIKit.framework */,
 				C9FE1F4A170F3FD0008D4D61 /* Foundation.framework */,
 				C9FE1F4C170F3FD0008D4D61 /* CoreGraphics.framework */,
